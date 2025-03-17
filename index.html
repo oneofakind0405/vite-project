@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To-Do 리스트</title>
+    <title>To-Do 리스트 + 캘린더</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>To-Do 리스트 작성 ✅</h1>
+        <h1>📅 캘린더 & To-Do 리스트 ✅</h1>
+        <div id="calendar"></div>
+        
         <div class="input-container">
             <input type="text" id="todo-input" placeholder="할 일을 입력하세요...">
             <button id="add-btn">추가</button>
@@ -17,5 +19,82 @@
     </div>
 
     <script type="module" src="main.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const calendarContainer = document.getElementById("calendar");
+
+            const renderCalendar = () => {
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = now.getMonth();
+                const firstDay = new Date(year, month, 1).getDay();
+                const lastDate = new Date(year, month + 1, 0).getDate();
+
+                let calendarHTML = `<div class="calendar-header">${year}년 ${month + 1}월</div>`;
+                calendarHTML += `<div class="calendar-grid">`;
+
+                const days = ["일", "월", "화", "수", "목", "금", "토"];
+                days.forEach(day => calendarHTML += `<div class="day-header">${day}</div>`);
+
+                for (let i = 0; i < firstDay; i++) {
+                    calendarHTML += `<div class="empty"></div>`;
+                }
+
+                for (let day = 1; day <= lastDate; day++) {
+                    calendarHTML += `<div class="calendar-day">${day}</div>`;
+                }
+
+                calendarHTML += `</div>`;
+                calendarContainer.innerHTML = calendarHTML;
+            };
+
+            renderCalendar();
+        });
+    </script>
+
+    <style>
+        #calendar {
+            width: 100%;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .calendar-header {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #388e3c;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .day-header {
+            font-weight: bold;
+            color: #4caf50;
+        }
+
+        .calendar-day, .day-header, .empty {
+            padding: 10px;
+            background-color: #e8f5e9;
+            border-radius: 5px;
+        }
+
+        .calendar-day {
+            cursor: pointer;
+        }
+
+        .calendar-day:hover {
+            background-color: #a5d6a7;
+        }
+
+        .selected {
+            background-color: #66bb6a !important;
+            color: white;
+        }
+    </style>
 </body>
 </html>
